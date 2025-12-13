@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import api from '../utils/apiHelper';
 import UserContext from "../context/UserContext";
 
 
 const CourseDetail = () => {
+    const navigate = useNavigate();
     const { authUser } = useContext(UserContext);
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -25,7 +26,14 @@ const CourseDetail = () => {
     }, [id]);
 
     const handleDelete = async (e) => {
-        await api(`/courses/${id}`, "DELETE", null, authUser);
+        e.preventDefault();
+        const password = prompt('Please enter your password to delete course');
+        const credentials ={
+            emailAddress: authUser.emailAddress,
+            password: password,
+        }
+        const response = await api(`/courses/${id}`, "DELETE", null, credentials);
+        if(response.ok)navigate("/");
     }
 
     if (loading) {
@@ -37,13 +45,16 @@ const CourseDetail = () => {
             <main>
                 <div className="actions--bar">
                     <div className="wrap">
-                        {authUser.id === course.userId ?
+                        
+                        {!authUser ?
+                        null :
+                        authUser.id === course.userId ?
                         <>
                             <a className="button" href={"/api/courses/"+id+"/update"}>Update Course</a>
                             <a className="button" href="#" onClick={handleDelete}>Delete Course</a>
                         </>
                         :
-                          null  }
+                          null }
                         <a className="button button-secondary" href="/">Return to List</a>
                     </div>
                 </div>

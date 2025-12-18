@@ -25,7 +25,7 @@ const UserSignIn = () => {
             emailAddress: emailAddress.current.value,
             password: password.current.value,
         }
-
+        // Attempt to sign in user
         try {
             const user = await actions.signIn(credentials);
             if (user) {
@@ -39,7 +39,7 @@ const UserSignIn = () => {
         }
 
     }   
-
+// Cancel sign-in and navigate to homepage
     const handleCancel = (event) => {
         event.preventDefault();
         navigate("/");

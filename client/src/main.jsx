@@ -5,8 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { UserProvider } from '../context/UserContext.jsx';
 
-import '../public/styles/reset.css';
-import '../public/styles/global.css';
+//import '/styles/reset.css';
+//import '/styles/global.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

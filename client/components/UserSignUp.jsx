@@ -27,7 +27,7 @@ const UserSignUp = () => {
             password: password.current.value,
         }
 
-        try {
+        try {// Make API call to create a new user
             const response = await api("/users", "POST", user, null);
             if (response.status === 201) {
                 console.log(`${user.emailAddress} is successfully signed up and authenticated!`);

@@ -12,19 +12,37 @@ const CourseDetail = () => {
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
 
+    // Fetch course data
     useEffect(() => {
         const fetchData = async () => {
                  await api(`/courses/${id}`, "GET", null, null)
-                .then(response => response.json())
-                .then(data => setCourse(data.course))
-                .catch(error => console.error('Error:', error))
-                .finally(() => setLoading(false));
+                .then(response => {
+                    if(!response.ok){
+                        let err = new Error(response.status);
+                        err.status = response.status;
+                        throw err;
+                    }   
+                    return response.json();
+                })
+                .then(data => {
+                    setCourse(data.course);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    if(error.status === 404){
+                            navigate("/notfound");
+                    }
+                    else{
+                        navigate("/error"); 
+                    }
+                });
         }
         if(id){
             fetchData();
         }
     }, [id]);
 
+// Handle course deletion 
     const handleDelete = async (e) => {
         e.preventDefault();
         const password = prompt('Please enter your password to delete course');

@@ -20,21 +20,40 @@ const UpdateCourse = () => {
 
 
     useEffect(() => {
+        // Fetch course data and populate form fields with setCourse(data.course)
         const fetchData = async () => {
             await api(`/courses/${id}`, "GET", null, null)
-                .then(response => response.json())
-                .then(data => setCourse(data.course))
-                .catch(error => console.error('Error:', error))
-                .finally(() => setLoading(false));
+                .then(response => {
+                    if (!response.ok) {
+                        let err = new Error(response.status);
+                        err.status = response.status;
+                        throw err;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                        setCourse(data.course);
+                        setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error:', error)
+                    if (error.status === 404) {
+                        navigate("/notfound");
+                    }
+                    else{
+                        navigate("/error");
+                    }
+                });
         }
         if (id) {
             fetchData();
         }
     }, [id]);
 
+        //handles the submit event to update the course
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        // Prompt for password to authenticate user with API
         const password = prompt('Please enter your password to update course');
         const credentials = {
             emailAddress: authUser.emailAddress,
@@ -47,6 +66,8 @@ const UpdateCourse = () => {
             estimatedTime: estimatedTime.current.value,
             materialsNeeded: materialsNeeded.current.value,
         }
+
+        //make api call to update course with provided data frome above
         try {
             const response = await api(`/courses/${id}`, "PUT", body, credentials);
             if (response.ok) {
@@ -66,7 +87,7 @@ const UpdateCourse = () => {
         }
 
     }
-
+    //navigate to course detail page without making any changes
     const handleCancel = (event) => {
         event.preventDefault();
         navigate(`/api/courses/${id}`);

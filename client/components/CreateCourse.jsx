@@ -29,7 +29,7 @@ const CreateCourse = () => {
             materialsNeeded: materialsNeeded.current.value,
             userId: authUser.id,
         }
-
+        //make api call to create course with provided data frome above
         try{
             const response = await api("/courses","POST", body, credentials);
             if (response.status === 201) {
@@ -56,7 +56,7 @@ const CreateCourse = () => {
 
         
     }
-
+// Cancel course creation and navigate to homepage
     const handleCancel = (event) => {
         event.preventDefault();
         navigate("/");

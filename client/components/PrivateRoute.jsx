@@ -9,6 +9,7 @@ const PrivateRoute = () => {
     if(authUser){
         return <Outlet />
     }
+    //if not authenticated, redirect to sign-in page sending the current location in state
     else{
         return <Navigate to="/signin" state = {{from: location.pathname}}/>
     }

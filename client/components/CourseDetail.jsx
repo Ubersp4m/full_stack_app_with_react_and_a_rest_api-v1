@@ -45,10 +45,10 @@ const CourseDetail = () => {
 // Handle course deletion 
     const handleDelete = async (e) => {
         e.preventDefault();
-        const password = prompt('Please enter your password to delete course');
+        // const password = prompt('Please enter your password to delete course');
         const credentials ={
             emailAddress: authUser.emailAddress,
-            password: password,
+            password: authUser.password,
         }
         const response = await api(`/courses/${id}`, "DELETE", null, credentials);
         if(response.ok)navigate("/");

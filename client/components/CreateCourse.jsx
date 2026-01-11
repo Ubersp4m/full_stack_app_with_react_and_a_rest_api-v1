@@ -16,10 +16,10 @@ const CreateCourse = () => {
     const handleSubmit = async (event) =>{
         event.preventDefault();
 
-        const password = prompt('Please enter your password to create course');
+        // const password = prompt('Please enter your password to create course');
         const credentials = {
             emailAddress: authUser.emailAddress,
-            password: password,
+            password: authUser.password,
         }
 
         const body = {

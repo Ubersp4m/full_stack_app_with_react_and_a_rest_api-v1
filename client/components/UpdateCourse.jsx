@@ -54,10 +54,10 @@ const UpdateCourse = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         // Prompt for password to authenticate user with API
-        const password = prompt('Please enter your password to update course');
+        // const password = prompt('Please enter your password to update course');
         const credentials = {
             emailAddress: authUser.emailAddress,
-            password: password,
+            password: authUser.password,
         }
 
         const body = {

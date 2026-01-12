@@ -1,16 +1,33 @@
 import api from '../utils/apiHelper';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
+    const navigate = useNavigate();
     const [courses, setCourses] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
                 await api("/courses", "GET", null, null)
-                .then(response => response.json())
+                .then(response =>  {
+                    if(!response.ok){
+                        let err = new Error(response.status);
+                        err.status = response.status;
+                        throw err;
+                    }   
+                    return response.json();
+                })
                 .then(data => setCourses(data.courses))
-                .catch(error => console.error('Error:', error))
+                .catch(error => {
+                    console.log(error);
+                    if(error.status === 404){
+                            navigate("/notfound");
+                    }
+                    else{
+                        navigate("/error"); 
+                    }
+                })
                 .finally(() => setLoading(false));
         }
 
